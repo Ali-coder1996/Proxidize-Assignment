@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hash-deployment
+  namespace: devops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hash-deployment
+  template:
+    metadata:
+      labels:
+        app: hash-deployment
+    spec:
+      containers:
+        - name: hash-deployment
+          image: docker.io/alialhjouj/hash:v15
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: OTEL_SERVICE_NAME
+              value: "hash-service"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://new-opentelemetry-collector:4317"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10

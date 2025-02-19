@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: hash-service
+  namespace: devops
+  labels:
+    release: prom-svc-monitor
+spec:
+  selector:
+    matchLabels:
+      app: hash-service
+  endpoints:
+    - port: hash-service
+      interval: 30s
+      path: /metrics

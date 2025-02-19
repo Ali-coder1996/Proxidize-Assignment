@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: length-deployment
+  namespace: devops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: length-deployment
+  template:
+    metadata:
+      labels:
+        app: length-deployment
+    spec:
+      containers:
+        - name: length-deployment
+          image: docker.io/alialhjouj/length:v5
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8081
+          env:
+            - name: OTEL_deployment_NAME
+              value: "length-deployment"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://new-opentelemetry-collector:4317"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 10
