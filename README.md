@@ -114,7 +114,7 @@ Prometheus scrapes these metrics from services.
 
 ## Example Request Flow
 
-![length service](./image/curl-length-servicec.png)
+![length service](./image/curl-length-service.png)
 
 **Returns: 5**
 
